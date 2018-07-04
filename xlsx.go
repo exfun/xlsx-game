@@ -21,6 +21,10 @@ func init()  {
 }
 func main() {
 	flag.Parse()
+	if !strings.Contains(f,".xlsx") {
+		log.Printf("only support *.xlsx files.")
+		waitAndExit(-1,3 )
+	}
 	log.Printf("flag->%s\n",f)
 	currentDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	config := make(map[string][]map[string]interface{})
@@ -28,15 +32,11 @@ func main() {
 		f = currentDir + "/" + f
 	}
 	f = strings.Replace(f, "\\", "/", -1)
-	/*if exists(filePath) {
-		log.Println("Not found path .", filePath)
-		waitAndExit(-1)
-	}*/
 	log.Printf("File in %s", f)
 	xlFile, err := xlsx.OpenFile(f)
 	if err != nil {
 		log.Printf("open failed: %s\n", err)
-		waitAndExit(-1)
+		waitAndExit(-1,3 )
 	}
 	for _, sheet := range xlFile.Sheets {
 		// 配置数据
@@ -92,18 +92,22 @@ func main() {
 	if err != nil {
 		log.Println("Get current dir error, ", err)
 	}
-	err = ioutil.WriteFile(currentDir + "/game_cfg.json", configJson, 0666)
+	// Json文件名
+	jsonFileName := strings.Replace(f,".xlsx",".json",1)
+	err = ioutil.WriteFile(jsonFileName, configJson, 0666)
 	if err != nil {
 		log.Println("Write JSON file error, ", err)
 	}else {
-		log.Println("JSON file at " + currentDir + "/game_cfg.json")
+		log.Println("JSON file at " + jsonFileName)
 	}
-	waitAndExit(0)
+	log.Println("Parse excel file success, done. ")
+	log.Println("策划棒棒哒，解析成功！")
+	waitAndExit(0,3 )
 }
 
-func waitAndExit(code int) {
-	log.Println("Exit after 5 seconds ...")
-	time.Sleep(time.Second * 5)
+func waitAndExit(code, dur int) {
+	log.Println("Exit after " + strconv.Itoa(dur) + " seconds ...")
+	time.Sleep(time.Second * time.Duration(dur))
 	os.Exit(code)
 }
 
@@ -158,16 +162,4 @@ func getBit() int {
 		bit = 32
 	}
 	return bit
-}
-
-// 判断所给路径文件/文件夹是否存在
-func exists (path string) bool {
-	_, err := os.Stat(path) //os.Stat获取文件信息
-	if err != nil {
-		if os.IsExist(err) {
-			return true
-		}
-		return false
-	}
-	return true
 }
