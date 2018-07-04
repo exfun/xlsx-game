@@ -11,5 +11,6 @@
        整数  数字            例：20
        其他默认字符串
        
-默认文件名game.xlsx, 放置同一目录下。
-命令行执行:  xlsx -f  game.xlsx （xx为文件路径）	
+默认文件名game.xlsx, 放置同一目录下。执行xlsx.bat， 编辑xlsx.bat可以配置解析N个文档<br>
+命令行执行:  xlsx -f  game.xlsx （xx为文件路径）<br>
+生成JSON的文件名同Excel文件名
