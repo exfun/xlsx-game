@@ -69,7 +69,7 @@ func main() {
 				// 空值处理
 				//value = strings.Replace(value, "", "null", -1)
 				maxIndex := len(keys) -1
-				if ij == maxIndex {
+				if ij > maxIndex {
 					break
 				}
 				rowMap[keys[ij]] = parseCellValue(value)
